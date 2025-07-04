@@ -70,10 +70,10 @@ int main(void) {
     boost::asio::write(port, boost::asio::buffer(data, data.size()));
 
     // // 受信バッファを準備（10バイト）
-    // std::vector<uint8_t> feedback(10);
+    std::vector<uint8_t> feedback(10);
 
     // // 実際に受信
-    // boost::asio::read(port, boost::asio::buffer(feedback, feedback.size()));
+    boost::asio::read(port, boost::asio::buffer(feedback, feedback.size()));
     
     // // 受信したデータを16進数で表示
     // std::cout << "フィードバック: ";
@@ -90,27 +90,27 @@ int main(void) {
     
     // std::cout << "CRC8チェック: " << (crc_valid ? "OK" : "NG") << std::endl;
 
-    // // デバッグ出力
-    // if (crc_valid) {
-    //     uint8_t motor_id = feedback[0];
-    //     uint8_t mode_value = feedback[1];
-    //     int16_t torque_current = (feedback[2] << 8) | feedback[3];
-    //     int16_t velocity = (feedback[4] << 8) | feedback[5];
-    //     uint8_t temperature = feedback[6];
-    //     uint8_t position_u8 = feedback[7];
-    //     uint8_t error_code = feedback[8];
+    // デバッグ出力
+    if (crc_valid) {
+        uint8_t motor_id = feedback[0];
+        uint8_t mode_value = feedback[1];
+        int16_t torque_current = (feedback[2] << 8) | feedback[3];
+        int16_t velocity = (feedback[4] << 8) | feedback[5];
+        uint8_t temperature = feedback[6];
+        uint8_t position_u8 = feedback[7];
+        uint8_t error_code = feedback[8];
         
-    //     std::cout << "\nResponse" << std::endl;
-    //     std::cout << "  Motor ID: " << static_cast<int>(motor_id) << std::endl;
-    //     std::cout << "  Mode: " << static_cast<int>(mode_value) << std::endl;
-    //     std::cout << "  Torque Current: " << torque_current << std::endl;
-    //     std::cout << "  Velocity: " << velocity << " rpm" << std::endl;
-    //     std::cout << "  Temperature: " << static_cast<int>(temperature) << "°C" << std::endl;
-    //     std::cout << "  Position (0-360°): " << static_cast<int>(position_u8) * 360 / 255 << "°" << std::endl;
-    //     std::cout << "  Error Code: 0x" << std::hex << static_cast<int>(error_code) << std::endl;
-    // } else {
-    //     std::cout << "CRC8ミスマッチ." << std::endl;
-    // }
+        std::cout << "\nResponse" << std::endl;
+        std::cout << "  Motor ID: " << static_cast<int>(motor_id) << std::endl;
+        std::cout << "  Mode: " << static_cast<int>(mode_value) << std::endl;
+        std::cout << "  Torque Current: " << torque_current << std::endl;
+        std::cout << "  Velocity: " << velocity << " rpm" << std::endl;
+        std::cout << "  Temperature: " << static_cast<int>(temperature) << "°C" << std::endl;
+        std::cout << "  Position (0-360°): " << static_cast<int>(position_u8) * 360 / 255 << "°" << std::endl;
+        std::cout << "  Error Code: 0x" << std::hex << static_cast<int>(error_code) << std::endl;
+    } else {
+        std::cout << "F**k off" << std::endl;
+    }
 
     return 0;
 }
