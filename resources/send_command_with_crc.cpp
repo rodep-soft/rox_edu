@@ -1,6 +1,11 @@
 // コンパイル方法
 // g++ send_command_with_crc.cpp -lboost_system -lpthread
 
+// boostインストール方法
+// sudo apt update
+// sudo apt install libboost-all-dev
+
+
 #include <boost/asio.hpp>
 #include <iostream>
 #include <string>
