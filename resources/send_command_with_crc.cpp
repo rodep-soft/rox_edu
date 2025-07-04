@@ -55,7 +55,7 @@ int main(void) {
 
 
 
-    for (uint16_t i = 300; i > -300; i--) {
+    for (uint16_t i = 300; i > 100; i--) {
         std::vector<uint8_t> data;
 
         data.push_back(0x01);
