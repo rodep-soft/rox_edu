@@ -79,7 +79,7 @@ int main(void) {
 
         std::vector<uint8_t> data2;
 
-        data2.push_back(0x01);
+        data2.push_back(0x02);
         data2.push_back(0x64);
         uint16_t val_u16 = static_cast<uint16_t>(-100); // 符号付きを符号なしに変換
 
