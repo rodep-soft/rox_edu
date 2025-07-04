@@ -84,9 +84,9 @@ int main(void) {
     // }
     // std::cout << std::endl;
     
-    // // CRC8の検証
-    // uint8_t calculated_crc = crc8_maxim(feedback.data(), 9);
-    // bool crc_valid = (calculated_crc == feedback[9]);
+    // CRC8の検証
+    uint8_t calculated_crc = crc8_maxim(feedback);
+    bool crc_valid = (calculated_crc == feedback[9]);
     
     // std::cout << "CRC8チェック: " << (crc_valid ? "OK" : "NG") << std::endl;
 
