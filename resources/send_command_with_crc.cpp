@@ -74,7 +74,7 @@ int main(void) {
 
 
         boost::asio::write(port, boost::asio::buffer(data, data.size()));
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 100ミリ秒待機
+        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 100ミリ秒待機
 
     }
     
