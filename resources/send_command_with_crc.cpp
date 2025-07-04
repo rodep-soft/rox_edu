@@ -81,7 +81,7 @@ int main(void) {
 
         data2.push_back(0x02);
         data2.push_back(0x64);
-        uint16_t val_u16_2 = static_cast<uint16_t>(100); // 符号付きを符号なしに変換
+        uint16_t val_u16_2 = static_cast<uint16_t>(-100); // 符号付きを符号なしに変換
 
         data2.push_back(static_cast<uint8_t>((val_u16_2 >> 8) & 0xFF)); // Highバイト  
         data2.push_back(static_cast<uint8_t>(val_u16_2 & 0xFF));        // Lowバイト
