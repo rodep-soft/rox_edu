@@ -16,17 +16,21 @@
 
 // CRC8-MAXIM calculation
 // Polynomial: x8 + x5 + x4 + 1 (0x31)
-uint8_t crc8_maxim(const uint8_t* data, size_t length) {
-    uint8_t crc = 0x00;
-    const uint8_t polynomial = 0x31; // x8 + x5 + x4 + 1
-    
-    for (size_t i = 0; i < length; i++) {
-        crc ^= data[i];
+uint8_t crc8_maxim(const std::vector<uint8_t>& data) {
+    uint8_t crc = 0x00; // 初期値  (一般的なMaxim CRCの標準)
+
+    const uint8_t reflected_polynomial = 0x8C; 
+
+    // データバイトを一つずつ処理
+    for (size_t i = 0; i < data.size(); i++) { // DATA[0]~DATA[8]まで、合計9バイト
+        crc ^= data[i]; // 現在のバイトとCRCレジスタをXOR
+
+        // 各バイトの8ビットを処理 (LSB First)
         for (uint8_t bit = 0; bit < 8; bit++) {
-            if (crc & 0x80) {
-                crc = (crc << 1) ^ polynomial;
+            if (crc & 0x01) { // 最下位ビットが1の場合
+                crc = (crc >> 1) ^ reflected_polynomial; // 右シフトして多項式とXOR
             } else {
-                crc <<= 1;
+                crc >>= 1; // 最下位ビットが0の場合、単に右シフト
             }
         }
     }
@@ -56,9 +60,10 @@ int main(void) {
         0x00,
         0x00,
         0x00,
-        0x00,
-        0x4F
+        0x00
     };
+
+    data.push_back(crc8_maxim(data));
     
 
     // コマンドを送る
