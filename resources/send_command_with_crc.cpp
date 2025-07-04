@@ -13,6 +13,8 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <cstdint>
+#include <chrono>
 
 // CRC8-MAXIM calculation
 // Polynomial: x8 + x5 + x4 + 1 (0x31)
@@ -72,6 +74,7 @@ int main(void) {
 
 
         boost::asio::write(port, boost::asio::buffer(data, data.size()));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 100ミリ秒待機
 
     }
     
