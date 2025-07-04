@@ -41,34 +41,20 @@ using namespace std;
 
 class SerialDriver {
     public:
-        SerialDriver(const string &port)
-            : io(), serial(io, port), work(make_work_guard(io))
-        {
+        SerialDriver(const string &port) : io(), serial(io, port) {
             try {
                 configureSerialPort();
-                io_thread_ = thread([this]() { io.run(); });
             } catch (const boost::system::system_error &e) {
                 throw runtime_error("Failed to configure serial port: " + string(e.what()));
             }
         }
 
-        ~SerialDriver() {
-            io.stop();
-            if (io_thread_.joinable()) {
-                io_thread_.join();
+        void sendData(const vector<uint8_t> &data) {
+            try {
+                boost::asio::write(serial, boost::asio::buffer(data));
+            } catch (const boost::system::system_error &e) {
+                // エラーログ出力など必要に応じて
             }
-        }
-
-        void asyncSendData(const vector<uint8_t> &data, std::function<void(bool)> callback) {
-            boost::asio::async_write(
-                serial, boost::asio::buffer(data),
-                [this, callback](const boost::system::error_code &ec, std::size_t /*bytes_transferred*/) {
-                    if (ec) {
-                        callback(false);
-                        return;
-                    }
-                    callback(true);
-                });
         }
 
         void sendMecanumCommand(/*args*/) {
@@ -112,20 +98,14 @@ class SerialDriver {
             // チェックサム追加
             appendChecksum(command_data);
             
-            // 非同期送信
-            asyncSendData(command_data, [](bool success) {
-                if (!success) {
-                    // エラーハンドリング
-                }
-            });
+            // 同期送信
+            sendData(command_data);
         }
 
     private:
         // boost::asioで通信を行うためのメンバ変数
         io_context io;
         serial_port serial;
-        thread io_thread_;
-        executor_work_guard<io_context::executor_type> work;
 
         void configureSerialPort() {
             // /**/の部分をデータシートや仕様に基づいて適切な値に置き換えること
@@ -153,7 +133,7 @@ class SerialDriver {
 class MecanumWheelControllerNode : public rclcpp::Node
 {
     public:
-        MecanumWheelControllerNode() : Node("mecanum_wheel_controller_node")
+        MecanumWheelControllerNode() : Node("mecanum_wheel_controller_node"), serial_driver_("/dev/ttyUSB0")
         {
             // topicの購読に必須
             cmd_vel_subscription_ = this->create_subscription<geometry_msgs::msg::Twist>(
@@ -175,7 +155,7 @@ class MecanumWheelControllerNode : public rclcpp::Node
                 ここがメインの実装
             */
 
-            sendMecanumCommand(/*args*/);
+            serial_driver_.sendMecanumCommand(/*args*/);
         }
 };
 
