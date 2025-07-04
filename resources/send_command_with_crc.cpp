@@ -85,13 +85,13 @@ int main(void) {
     // std::cout << std::endl;
     
     // CRC8の検証
-    uint8_t calculated_crc = crc8_maxim(feedback);
-    bool crc_valid = (calculated_crc == feedback[9]);
+    // uint8_t calculated_crc = crc8_maxim(feedback);
+    // bool crc_valid = (calculated_crc == feedback[9]);
     
     // std::cout << "CRC8チェック: " << (crc_valid ? "OK" : "NG") << std::endl;
 
     // デバッグ出力
-    if (crc_valid) {
+    // if (crc_valid) {
         uint8_t motor_id = feedback[0];
         uint8_t mode_value = feedback[1];
         int16_t torque_current = (feedback[2] << 8) | feedback[3];
@@ -108,9 +108,9 @@ int main(void) {
         std::cout << "  Temperature: " << static_cast<int>(temperature) << "°C" << std::endl;
         std::cout << "  Position (0-360°): " << static_cast<int>(position_u8) * 360 / 255 << "°" << std::endl;
         std::cout << "  Error Code: 0x" << std::hex << static_cast<int>(error_code) << std::endl;
-    } else {
-        std::cout << "F**k off" << std::endl;
-    }
+    // } else {
+        // std::cout << "F**k off" << std::endl;
+    // }
 
     return 0;
 }
