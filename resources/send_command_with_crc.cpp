@@ -88,7 +88,7 @@ int main(void) {
 
         data2.push_back(0x00);
         data2.push_back(0x00);
-        data2.push_back(0x00);
+        data2.push_back(0xFF);
         data2.push_back(0x00);
         data2.push_back(0x00); 
         data2.push_back(crc8_maxim(data2));
