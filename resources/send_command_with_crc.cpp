@@ -55,12 +55,12 @@ int main(void) {
 
 
 
-    for (int16_t i = 300; i >= 0; i--) {
+    // for (int16_t i = 300; i >= 0; i--) {
         std::vector<uint8_t> data;
 
         data.push_back(0x01);
         data.push_back(0x64);
-        uint16_t val_u16 = static_cast<uint16_t>(i); // 符号付きを符号なしに変換
+        uint16_t val_u16 = static_cast<uint16_t>(300); // 符号付きを符号なしに変換
 
         data.push_back(static_cast<uint8_t>((val_u16 >> 8) & 0xFF)); // Highバイト  
         data.push_back(static_cast<uint8_t>(val_u16 & 0xFF));        // Lowバイト
@@ -75,7 +75,26 @@ int main(void) {
 
         boost::asio::write(port, boost::asio::buffer(data, data.size()));
 
-    }
+    // }
+
+        std::vector<uint8_t> data2;
+
+        data2.push_back(0x01);
+        data2.push_back(0x64);
+        uint16_t val_u16 = static_cast<uint16_t>(-100); // 符号付きを符号なしに変換
+
+        data2.push_back(static_cast<uint8_t>((val_u16 >> 8) & 0xFF)); // Highバイト  
+        data2.push_back(static_cast<uint8_t>(val_u16 & 0xFF));        // Lowバイト
+
+        data2.push_back(0x00);
+        data2.push_back(0x00);
+        data2.push_back(0x00);
+        data2.push_back(0x00);
+        data2.push_back(0x00); 
+        data2.push_back(crc8_maxim(data2));
+
+
+        boost::asio::write(port, boost::asio::buffer(data2, data2.size()));
     
 
     // コマンドを送る
